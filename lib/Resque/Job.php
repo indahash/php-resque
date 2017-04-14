@@ -260,7 +260,14 @@ class Resque_Job
 		}
 		$name[] = $this->payload['class'];
 		if(!empty($this->payload['args'])) {
-			$name[] = json_encode($this->payload['args']);
+		    $job = json_encode($this->payload['args']);
+            $logger = $this->worker->logger;
+
+            if (!$logger->verbose) {
+                $job = substr($job, 0, 50) . ' ...';
+            }
+
+			$name[] = $job;
 		}
 		return '(' . implode(' | ', $name) . ')';
 	}
