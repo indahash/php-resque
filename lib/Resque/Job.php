@@ -264,7 +264,7 @@ class Resque_Job
             $logger = $this->worker->logger;
 
             if (!$logger->verbose) {
-                $job = substr($job, 0, 50) . ' ...';
+                $job = substr($job, 0, 250) . ' ...';
             }
 
 			$name[] = $job;
