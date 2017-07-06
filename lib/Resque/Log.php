@@ -38,6 +38,17 @@ class Resque_Log extends Psr\Log\AbstractLogger
 				'[' . $level . '] ' . $this->interpolate($message, $context) . PHP_EOL
 			);
 		}
+
+        if (!in_array($level, [Psr\Log\LogLevel::INFO, Psr\Log\LogLevel::NOTICE, Psr\Log\LogLevel::DEBUG])) {
+            $di = \Phalcon\Di::getDefault();
+            $log = $di->get('log');
+
+            if (!method_exists($log, $level)) {
+                $level = 'error';
+            }
+
+            $log->error($this->interpolate($message, $context));
+        }
 	}
 
 	/**
