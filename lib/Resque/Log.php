@@ -47,7 +47,7 @@ class Resque_Log extends Psr\Log\AbstractLogger
                 $level = 'error';
             }
 
-            $log->error($this->interpolate($message, $context));
+            $log->$level($this->interpolate($message, $context));
         }
 	}
 
