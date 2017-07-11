@@ -24,6 +24,8 @@ class Resque_Log extends Psr\Log\AbstractLogger
 	 */
 	public function log($level, $message, array $context = array())
 	{
+	    $this->logPhalconError($level, $message, $context);
+
 		if ($this->verbose) {
 			fwrite(
 				STDOUT,
@@ -38,17 +40,6 @@ class Resque_Log extends Psr\Log\AbstractLogger
 				'[' . $level . '] ' . $this->interpolate($message, $context) . PHP_EOL
 			);
 		}
-
-        if (!in_array($level, [Psr\Log\LogLevel::INFO, Psr\Log\LogLevel::NOTICE, Psr\Log\LogLevel::DEBUG])) {
-            $di = \Phalcon\Di::getDefault();
-            $log = $di->get('log');
-
-            if (!method_exists($log, $level)) {
-                $level = 'error';
-            }
-
-            $log->$level($this->interpolate($message, $context));
-        }
 	}
 
 	/**
@@ -70,4 +61,23 @@ class Resque_Log extends Psr\Log\AbstractLogger
 		// interpolate replacement values into the message and return
 		return strtr($message, $replace);
 	}
+
+    /**
+     * @param $level
+     * @param $message
+     * @param array $context
+     */
+    protected function logPhalconError($level, $message, array $context)
+    {
+        if (!in_array($level, [Psr\Log\LogLevel::INFO, Psr\Log\LogLevel::NOTICE, Psr\Log\LogLevel::DEBUG])) {
+            $di = \Phalcon\Di::getDefault();
+            $log = $di->get('log');
+
+            if (!method_exists($log, $level)) {
+                $level = 'error';
+            }
+
+            $log->$level($this->interpolate($message, $context));
+        }
+    }
 }
