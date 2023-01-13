@@ -70,7 +70,7 @@ class Resque_Log extends Psr\Log\AbstractLogger
     protected function logPhalconError($level, $message, array $context)
     {
         if (!in_array($level, [Psr\Log\LogLevel::INFO, Psr\Log\LogLevel::NOTICE, Psr\Log\LogLevel::DEBUG])) {
-            $di = \Phalcon\Di::getDefault();
+            $di = \Phalcon\Di\Di::getDefault();
             $log = $di->get('log');
 
             if (!method_exists($log, $level)) {
