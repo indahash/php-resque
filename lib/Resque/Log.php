@@ -29,7 +29,7 @@ class Resque_Log extends Psr\Log\AbstractLogger
 		if ($this->verbose) {
 			fwrite(
 				STDOUT,
-				'[' . $level . '] [' . (new DateTime())->format('H:i:s Y-m-d')) . '] ' . $this->interpolate($message, $context) . PHP_EOL
+				'[' . $level . '] [' . (new DateTime())->format('H:i:s Y-m-d') . '] ' . $this->interpolate($message, $context) . PHP_EOL
 			);
 			return;
 		}

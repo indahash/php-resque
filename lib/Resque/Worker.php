@@ -202,7 +202,7 @@ class Resque_Worker
 
             // Forked and we're the child. Run the job.
             if ($this->child === 0 || $this->child === false) {
-                $status = 'Processing ' . $job->queue . ' since ' . (new DateTime())->format('Y-m-d H:i:s');;
+                $status = 'Processing ' . $job->queue . ' since ' . (new DateTime())->format('Y-m-d H:i:s');
                 $this->updateProcLine($status);
                 $this->logger->log(Psr\Log\LogLevel::INFO, $status);
                 $this->perform($job);
@@ -213,7 +213,7 @@ class Resque_Worker
 
             if($this->child > 0) {
                 // Parent process, sit and wait
-                $status = 'Forked ' . $this->child . ' at ' . (new DateTime())->format('Y-m-d H:i:s');;
+                $status = 'Forked ' . $this->child . ' at ' . (new DateTime())->format('Y-m-d H:i:s');
                 $this->updateProcLine($status);
                 $this->logger->log(Psr\Log\LogLevel::INFO, $status);
 
