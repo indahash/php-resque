@@ -8,6 +8,8 @@
  */
 class Resque_Job
 {
+    private const MAX_ARGUMENT_VALUE_LENGTH_FOR_LOGGING = 512;
+    
 	/**
 	 * @var string The name of the queue that this job belongs to.
 	 */
@@ -260,15 +262,23 @@ class Resque_Job
 		}
 		$name[] = $this->payload['class'];
 		if(!empty($this->payload['args'])) {
-		    $job = json_encode($this->payload['args']);
-//            $logger = $this->worker->logger;
+            $argsToInclude = [];
 
-//            if ($logger && !$logger->verbose) {
-                $job = substr($job, 0, 250) . ' ...';
-//            }
+            foreach (($this->payload['args']) ?? [] as $argName => $argVal) {
+                if (
+                    is_string($argVal) &&
+                    strlen($argVal) > self::MAX_ARGUMENT_VALUE_LENGTH_FOR_LOGGING &&
+                    !str_starts_with($argVal, '__') // skip meta arguments from truncating
+                ) {
+                    $argVal = substr(0, self::MAX_ARGUMENT_VALUE_LENGTH_FOR_LOGGING - 3) . '...';
+                }
 
-			$name[] = $job;
+                $argsToInclude[$argName] = $argVal;
+            }
+
+			$name[] = json_encode($argsToInclude);
 		}
+
 		return '(' . implode(' | ', $name) . ')';
 	}
 
