@@ -264,7 +264,7 @@ class Resque_Job
 		if(!empty($this->payload['args'])) {
             $argsToInclude = [];
 
-            foreach (($this->payload['args']) ?? [] as $argName => $argVal) {
+            foreach (($this->payload['args'] ?? []) as $argName => $argVal) {
                 if (
                     is_string($argVal) &&
                     strlen($argVal) > self::MAX_ARGUMENT_VALUE_LENGTH_FOR_LOGGING &&
